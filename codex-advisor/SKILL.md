@@ -1,11 +1,11 @@
 ---
 name: codex-advisor
-description: Run a read-only GPT-6 Astra advisor consultation at high effort, using native delegation when available or the
+description: Run a read-only GPT-6 Astra advisor consultation, xhigh effort for one consult and high for checkpoints, using native delegation in Codex or the
   documented CLI fallback. A question after the trigger means one consult; a bare trigger or a task means session
   checkpoints; `-i` forces one consult, `-chk` forces checkpoints. Aliases /codex-advisor, /codevisor.
 ---
 
-# /codex-advisor (alias: /codevisor) — GPT-6 Astra consultation (high effort)
+# /codex-advisor (alias: /codevisor) — GPT-6 Astra consultation
 
 ## Trigger
 
@@ -27,33 +27,33 @@ Only the very next token can be a flag; `-i` or `true` elsewhere, or another com
 - One consult: exactly one consult now on the current request or attached question; act on it as executor; consult again only when the user invokes the skill again. [checkpoint policy](references/checkpoints.md) does not apply.
 - Checkpoints: on for the rest of the session. Read [checkpoint policy](references/checkpoints.md); it plus "Checkpoint frequency" below govern when to consult.
 
-Model, effort, transport, no-timeout rule, prompt structure and safety are identical in both modes.
+Model, transport, no-timeout rule, prompt structure and safety are identical in both modes. Effort differs: one consult `xhigh`, checkpoints `high`.
 
 ## Fixed roles
 
-- Advisor: GPT-6 Astra at `high` reasoning effort, always.
-- Transport: native Codex subagent when available; read-only Codex CLI otherwise.
+- Advisor: GPT-6 Astra. Effort by mode: `xhigh` for one consult, `high` for every checkpoint consult.
+- Transport: native Codex subagent inside Codex; read-only Codex CLI in every other harness (Claude Code, Pi, Cursor, other).
 - Executor: current session's main model, read from context; never hardcode.
 
 ## On activation
 
 State the mode in one line, then act:
 
-- One consult: "One-time GPT-6 Astra consult (`high` effort, no skill-imposed timeout); session checkpoints off." Run the consult, continue as executor.
+- One consult: "One-time GPT-6 Astra consult (`xhigh` effort, no skill-imposed timeout); session checkpoints off." Run the consult, continue as executor.
 - Checkpoints: "Advisor checkpoints active for this session (GPT-6 Astra at `high` reasoning effort, native Astra subagent when available and read-only Codex CLI fallback otherwise, no skill-imposed wall-clock timeout, executor = current session model)." Continue the user's request, consulting per [checkpoint policy](references/checkpoints.md).
 
 ## Transport
 
-Native: when the agent exposes `spawn_agent`/`wait_agent` and permits `gpt-6-astra` at `high` effort. Needs no local Codex CLI; no shell-out, no temporary wrapper. Call `spawn_agent` once:
+Native: when the agent exposes `spawn_agent`/`wait_agent` and permits `gpt-6-astra` at the mode's effort. Needs no local Codex CLI; no shell-out, no temporary wrapper. Call `spawn_agent` once:
 
 - `agent_type: "default"`
 - `model: "gpt-6-astra"`
-- `reasoning_effort: "high"`
+- `reasoning_effort: "xhigh"` for one consult, `"high"` for a checkpoint consult
 - `fork_turns: "none"` (makes the model override valid)
 - concrete task name
 - self-contained read-only prompt (below)
 
-CLI fallback: native unavailable → read [CLI fallback](references/cli-fallback.md) first. Check installed flags and permissions; do not evade a sandbox restriction.
+CLI fallback: native unavailable → read [CLI fallback](references/cli-fallback.md) first; set `model_reasoning_effort` to the mode's effort. Check installed flags and permissions; do not evade a sandbox restriction.
 
 Built-in `/advisor` reaches Claude-family models only (see `/claude-advisor`); shows no GPT-6 Astra route.
 
@@ -83,7 +83,7 @@ The skill adds no wall-clock deadline (external platform/process limits may exis
 
 - Serious weight, not binding. Step fails empirically, or primary-source evidence contradicts a claim (file says X, advisor assumed Y) → adapt.
 - Evidence and advisor disagree → one short tie-break follow-up ("found X, you suggested Y — which constraint breaks the tie?"); part of the same consult, allowed in one-time mode.
-- Small, focused decisions. Each consult is a real GPT-6 Astra `high` call: slow, not free.
+- Small, focused decisions. Each consult is a real GPT-6 Astra call at `xhigh` or `high`: slow, not free.
 
 ## Safety
 

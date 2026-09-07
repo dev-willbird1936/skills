@@ -5,8 +5,9 @@ Read only for the route identified by [SKILL.md](../SKILL.md). Commands and bare
 ## How to consult (the actual mechanism)
 
 Call the `Agent` tool with:
-- `subagent_type: "claude-advisor"` — a dedicated agent definition at
-  `~/.claude/agents/claude-advisor.md` that pins `model: claude-fable-5-1` and `effort: high` in its own
+- `subagent_type` by mode: `"claude-advisor-xhigh"` for one consult, `"claude-advisor"` for a
+  checkpoint consult. Each is a dedicated agent definition in `~/.claude/agents/` that pins
+  `model: claude-fable-5-1` and `effort: xhigh` or `effort: high` respectively in its own
   frontmatter (`effort` is a documented, supported frontmatter field — values `low`/`medium`/
   `high`/`xhigh`/`max` — confirmed against current official Claude Code docs). This is the REAL
   reasoning-effort lever: the generic `Agent` tool call has no per-call effort parameter for
@@ -28,12 +29,11 @@ Call the `Agent` tool with:
   3. An explicit framing: *"Act as a second opinion / advisor on this decision. Give a direct,
      concise recommendation with your reasoning — not an implementation. If you disagree with the
      current approach, say so plainly and explain why."*
-  4. A reinforcing high-effort line, in these or similar words: *"Use a high level of reasoning
-     effort for this consult — think carefully and thoroughly before answering."* The
-     `claude-advisor` agent definition already pins real `high` effort, so this line is
-     redundant reinforcement, not the only lever — if it's ever the only thing pinning the
-     effort level, that means the agent definition got lost or renamed; fix that instead of
-     leaning on prompt text alone.
+  4. A reinforcing effort line, in these or similar words: *"Use a high level of reasoning
+     effort for this consult — think carefully and thoroughly before answering."* The agent
+     definition already pins the real effort, so this line is redundant reinforcement, not the
+     only lever — if it's ever the only thing pinning the effort level, that means the agent
+     definition got lost or renamed; fix that instead of leaning on prompt text alone.
 
 Verify the configured model and effort in the actual agent definition before the consult. A bare model-only call can inherit the host's current effort setting; prompt text does not establish the runtime parameter. Preserve the named agent's pin and report if the host cannot support it.
 

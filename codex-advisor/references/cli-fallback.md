@@ -4,6 +4,8 @@ Read only for the route identified by [SKILL.md](../SKILL.md). Commands and bare
 
 ## Preconditions
 
+- `[EFFORT]` is `xhigh` for an individual consult and `high` for a checkpoint consult, from the parent skill's Mode section.
+
 - Codex CLI is installed and authenticated (ChatGPT/subscription login). Verify with
   `"$(command -v codex || command -v codex.cmd)" --version` — see the binary-resolution note
   below for why the fallback matters.
@@ -48,7 +50,7 @@ try {
     '--sandbox', 'read-only',
     '--color', 'never',
     '--model', 'gpt-6-astra',
-    '--config', 'model_reasoning_effort="high"',
+    '--config', 'model_reasoning_effort="[EFFORT]"',
     '--output-last-message', $tmp,
     '-'
   )
@@ -92,7 +94,7 @@ codex_bin="$(command -v codex || command -v codex.cmd)"
 tmp="$(mktemp)"
 "$codex_bin" exec --cd "$(pwd)" --skip-git-repo-check --ignore-user-config \
   --sandbox read-only --color never \
-  -m gpt-6-astra -c model_reasoning_effort=high -o "$tmp" - <<'PROMPT_EOF' >/dev/null
+  -m gpt-6-astra -c model_reasoning_effort=[EFFORT] -o "$tmp" - <<'PROMPT_EOF' >/dev/null
 <fully self-contained prompt — see structure below>
 PROMPT_EOF
 cat "$tmp"
@@ -119,7 +121,7 @@ rm -f "$tmp"
   to be read-only analysis, and measured ~2.4x slower startup (~20s vs ~8.4s) because of it.
   Authentication is unaffected; `-m`/`-c` still pin model/effort regardless of the now-ignored
   config defaults.
-- `-m gpt-6-astra -c model_reasoning_effort=high`: pins the model and effort explicitly, so
+- `-m gpt-6-astra -c model_reasoning_effort=[EFFORT]`: pins the model and effort explicitly, so
   the consult stays correct even if `~/.codex/config.toml`'s defaults ever drift.
 - `--color never`: keeps the captured output free of ANSI escape codes.
 - `-o "$tmp"`, with stdout suppressed (`>/dev/null`, stderr kept) and read back from `$tmp`

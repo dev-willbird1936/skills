@@ -1,7 +1,7 @@
 ---
 name: codex-blue-advisor
 description: >
-  Read-only Daybreak Blue advisor at xhigh effort. Trigger only on `/codex-blue-advisor`,
+  Read-only Daybreak Blue advisor, xhigh effort for one consult and high for checkpoints. Trigger only on `/codex-blue-advisor`,
   `/bluevisor`, or an explicit Daybreak Blue advisor request. A bare trigger or a task means
   session checkpoints; a question means one consult; `-i` forces one consult, `-chk` forces
   checkpoints. Prefer the native subagent and fall back to Pi.
@@ -22,7 +22,7 @@ description: >
 | nothing, or a task description without a question | Session checkpoints |
 
    Only the very next token can be a flag. Strip it before interpreting the request. A question asks for an answer now; a task asks for work; unsure, treat as a question and say which reading you took. Flags never raise consultation frequency; checkpoint policy governs that.
-3. Confirm in one short line. Checkpoints: Codex Blue Advisor checkpoints active for this session; Daybreak Blue (gpt-daybreak-blue-latest) at xhigh reasoning effort via native subagent when available, else Pi openai-codex/gpt-daybreak-blue; no skill-imposed wall-clock timeout; current session model remains executor. One consult: same line with "one consult, checkpoints off". Then continue with the user's request.
+3. Confirm in one short line. Checkpoints: Codex Blue Advisor checkpoints active for this session; Daybreak Blue (gpt-daybreak-blue-latest) at high reasoning effort via native subagent when available, else Pi openai-codex/gpt-daybreak-blue; no skill-imposed wall-clock timeout; current session model remains executor. One consult: same line with "xhigh reasoning effort, one consult, checkpoints off". Then continue with the user's request.
 
 ## Non-negotiables (every consult)
 
@@ -37,14 +37,14 @@ description: >
 
 ## Roles
 
-- Advisor: Codex Daybreak Blue, model gpt-daybreak-blue-latest, xhigh reasoning effort.
+- Advisor: Codex Daybreak Blue, model gpt-daybreak-blue-latest. Effort by mode: xhigh for one consult, high for every checkpoint consult.
 - Preferred transport: native Codex subagent when the host exposes it.
-- Fallback transport: Pi `--provider openai-codex --model gpt-daybreak-blue --thinking xhigh`.
+- Fallback transport: Pi `--provider openai-codex --model gpt-daybreak-blue --thinking <xhigh|high>` by mode.
 - Executor: current session's main model. Do not hardcode it unless context requires.
 
 ## Preconditions
 
-- Native Codex subagent route accepting gpt-daybreak-blue-latest at xhigh effort, or Pi installed (`pi` on PATH) and authenticated for openai-codex.
+- Native Codex subagent route accepting gpt-daybreak-blue-latest at the mode's effort, or Pi installed (`pi` on PATH) and authenticated for openai-codex.
 - No git repository required.
 
 ## Running a consult
@@ -55,7 +55,7 @@ Before every consultation read [the prompt contract](references/prompt-contract.
 
 Use when the agent exposes native subagent tools and permits gpt-daybreak-blue-latest. No local launcher, no temporary wrapper.
 
-1. Call the native spawn tool once: agent type `default`; model `gpt-daybreak-blue-latest`; reasoning effort `xhigh`; no inherited fork or history when the host supports it (isolated prompt unless the host requires otherwise); concrete task name; the advisor prompt.
+1. Call the native spawn tool once: agent type `default`; model `gpt-daybreak-blue-latest`; reasoning effort `xhigh` for one consult or `high` for a checkpoint; no inherited fork or history when the host supports it (isolated prompt unless the host requires otherwise); concrete task name; the advisor prompt.
 2. Record the exact advisor task name or ID.
 3. Wait on that same agent with repeated bounded waits; one empty wait is not a reason to interrupt.
 4. Waits may wake for unrelated input or agents: match notifications to the exact advisor ID; on ambiguity inspect statuses and keep waiting while it is active.
