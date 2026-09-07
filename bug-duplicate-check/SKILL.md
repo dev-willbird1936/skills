@@ -9,47 +9,29 @@ description: >-
 
 # Bug Duplicate Check
 
-## Canonical registry
+Determine whether the same underlying bug already exists anywhere relevant. Optimize for avoiding false novelty claims, not speed.
 
-If this check changes a finding or hunt row, use the Google Workspace MCP
-against the spreadsheet in `System/registry.md`. Canonical finding records
-live at `Findings/<program>/<software>/<id>/`. Local CSV files are derived
-views, not authority.
+## Non-negotiables
 
-Determine whether the same underlying bug already exists anywhere relevant. Optimize for avoiding false novelty claims, not for producing a fast answer.
+- Read-only: never file, comment, disclose, edit repositories, or mutate trackers. Writes are limited to the local durable artifact and the canonical-registry row described below.
+- Decide from tools and current primary sources (canonical trackers, commits, patches, advisories, vendor records, release notes). Never from memory, one database, or a title/snippet; a search hit is discovery evidence only until its primary record is opened. Current external facts require browsing.
+- Compare bug identity, not labels. Same CWE, symptom, endpoint, component, or impact alone never establishes duplication.
+- Every record state is prior art: open, closed, merged, reverted, duplicate, wontfix, invalid, archived, historical versions. Search security and non-security prior art: issue, fix, regression test, release note, support thread, commit, advisory, duplicate closure, private tracker item.
+- Answer two questions: **same bug?** and **already fixed?** Filing eligibility is separate: only when asked, appended as a context-specific disposition after the verdict. Bounty eligibility, severity, payout, disclosure status never alter identity analysis.
+- Never promise absolute novelty; private or inaccessible corpora may exist. `NO_DUPLICATE_FOUND` only after every accessible critical source passes the coverage gate; `INCONCLUSIVE` when a critical source is blocked.
+- Timestamp results: novelty is an as-of claim.
+- Cite every duplicate claim with a direct URL/file. Log zero-result searches with exact query and scope; absence is meaningful only then.
+- Stop only at the coverage gate, never at the first "no result".
 
-## Operating contract
+## Inputs
 
-- Keep the investigation read-only. Do not file, comment, disclose, edit repositories, or mutate trackers.
-- Use tools and current sources. Never decide from memory, search snippets, titles alone, or one database.
-- Search security and non-security prior art. A bug can be documented as an issue, fix, regression test, release note, support thread, commit, advisory, duplicate closure, or private tracker item.
-- Compare bug identity, not labels. Same CWE, symptom, endpoint, component, or impact alone does not establish duplication.
-- Treat open, closed, merged, reverted, duplicate, wontfix, invalid, and archived records as prior art.
-- Separate three questions: **same bug?**, **already fixed?**, and **eligible to file here?** This skill answers the first two. Discuss filing eligibility only when requested.
-- Never promise absolute novelty. Proving nonexistence is impossible when relevant private or inaccessible corpora may exist. Use `NO_DUPLICATE_FOUND` only after all accessible critical sources pass the coverage gate; use `INCONCLUSIVE` when a critical source is blocked.
-- Timestamp results. Novelty is an as-of claim.
+Accept: finding/bug ID, filename, path, issue URL, advisory ID, partial title; local write-up or source checkout; natural-language description; two records to compare directly.
 
-## Inputs and invocation
+Resolve ambiguous local matches before external search. Without a write-up, obtain or derive: (1) target product/repository and affected version, (2) trigger or entry point, (3) observed or expected behavior, (4) distinguishing mechanism/root cause if known. Mark missing identity fields `unknown`, never invent; unresolved core identity lowers confidence and may force `INCONCLUSIVE`.
 
-Accept any of:
+## Progress ledger
 
-- Finding/bug ID, filename, path, issue URL, advisory ID, or partial title.
-- Local write-up or source checkout.
-- Natural-language bug description.
-- Two records to compare directly.
-
-Resolve ambiguous local matches before searching externally. If no write-up exists, obtain or derive at least:
-
-1. target product/repository and affected version;
-2. trigger or entry point;
-3. observed or expected behavior;
-4. distinguishing mechanism/root cause, if known.
-
-Do not invent missing identity fields. Mark them `unknown`; unresolved core identity lowers confidence and may force `INCONCLUSIVE`.
-
-## Required progress ledger
-
-Maintain this checklist during execution:
+Maintain during execution:
 
 ```text
 Bug duplicate check:
@@ -65,22 +47,15 @@ Bug duplicate check:
 
 ## Phase 0 - Resolve authoritative bug record
 
-Search local context first with `rg`/`rg --files`. Include dedicated findings folders, issue exports, reports, duplicate checks, rejected findings, audit notes, changelogs, and source checkouts. Exclude generated/dependency trees unless evidence points there.
+Search local context first with `rg`/`rg --files`: findings folders, issue exports, reports, duplicate checks, rejected findings, audit notes, changelogs, source checkouts. Exclude generated/dependency trees unless evidence points there.
 
-Record:
+Record: canonical ID/title and source file or URL; target product/repo/package/plugin/service/fork/deployment; audited commit, release, build, platform, configuration, affected range; existing issue/CVE/GHSA/advisory/report IDs and links; existing duplicate assessments with evidence; comparison scope (local workspace, one tracker, one product, upstream/downstream, one disclosure program, global public prior art).
 
-- Canonical ID/title and source file or URL.
-- Target product, repo, package, plugin, service, fork, or deployment.
-- Audited commit, release, build, platform, configuration, and affected range.
-- Existing issue/CVE/GHSA/advisory/report IDs and links.
-- Existing duplicate assessments and their evidence.
-- Whether comparison scope is local workspace, one tracker, one product, upstream/downstream, one disclosure program, or global public prior art.
-
-Prefer the most complete primary record. Treat reports, PoCs, validation notes, and duplicate assessments as supporting artifacts, not separate bugs unless they describe a distinct root cause.
+Prefer the most complete primary record. Reports, PoCs, validation notes, duplicate assessments are supporting artifacts of one bug unless they describe a distinct root cause.
 
 ## Phase 1 - Build canonical bug fingerprint
 
-Create this fingerprint before web searching:
+Fill before any web search:
 
 | Dimension | Required content |
 |---|---|
@@ -99,16 +74,16 @@ Create this fingerprint before web searching:
 
 Then write:
 
-- **Identity sentence:** one sentence containing actor + trigger + mechanism + sink + result.
+- **Identity sentence:** actor + trigger + mechanism + sink + result, one sentence.
 - **Exclusion sentence:** nearest similar behavior that is *not* this bug.
 - **Alias set:** old/new product names, package/module names, endpoint variants, symbol names, error strings, protocol terms, CWE/general terms, abbreviations, translations where relevant.
-- **Candidate-killing facts:** facts that would immediately prove a search hit is a different bug.
+- **Candidate-killing facts:** facts that immediately prove a hit is a different bug.
 
-Do not begin with generic terms such as `SSRF`, `crash`, or `IDOR`; they create noisy similarity without identity.
+Start from specific identity terms; generic terms (`SSRF`, `crash`, `IDOR`) give noisy similarity without identity.
 
 ## Phase 2 - Build source coverage map
 
-Read [source-catalog.md](references/source-catalog.md), select every applicable source class, and mark each `REQUIRED`, `SUPPORTING`, `NOT_APPLICABLE`, or `BLOCKED`.
+Read [source-catalog.md](references/source-catalog.md), select every applicable source class, mark each `REQUIRED`, `SUPPORTING`, `NOT_APPLICABLE`, or `BLOCKED`.
 
 Universal source classes:
 
@@ -118,25 +93,23 @@ Universal source classes:
 4. Vendor/product support and known-issue records.
 5. Security/advisory databases when security-relevant.
 6. Ecosystem/package/fork/upstream/downstream records.
-7. General web, research, mailing lists, forums, and specialist sources.
+7. General web, research, mailing lists, forums, specialist sources.
 8. Program/private/internal report corpus when relevant and authorized.
 
-Critical-source rules:
+Critical sources:
 
-- Canonical tracker and code/release history are critical for source-available projects.
-- Vendor known-issues/support and release history are critical for closed-source products.
-- Advisory databases are critical for security bugs.
-- The intended report corpus is critical when the question is "duplicate in this bounty/internal tracker?"
-- Upstream records are critical when code is vendored, forked, generated, or dependency-owned.
-- A blocked critical source prevents a high-confidence novelty claim.
+- Source-available project: canonical tracker and code/release history.
+- Closed-source product: vendor known-issues/support and release history.
+- Security bug: advisory databases. Run the `vuln-intel` MCP first when connected (`search_vulns`, `verify_cve_claim`, `enrich_cve`, `search_public_code`), then open every primary record it surfaces. Add research-lab disclosures, security mailing lists, code search engines, distribution security trackers per the catalog; a CVE database alone is one source, not coverage.
+- Question "duplicate in this bounty/internal tracker?": the intended report corpus.
+- Vendored, forked, generated, or dependency-owned code: upstream records.
+- A blocked critical source prevents a high-confidence novelty claim. Record it `BLOCKED`; never downgrade to `NOT_APPLICABLE`.
 
-Record visibility limits explicitly. Public search cannot enumerate private bounty reports, embargoed advisories, private Jira projects, deleted posts, unindexed comments, or unpublished fixes.
+Record visibility limits explicitly: public search cannot enumerate private bounty reports, embargoed advisories, private Jira projects, deleted posts, unindexed comments, unpublished fixes.
 
 ## Phase 3 - Execute search matrix
 
-Search in parallel where possible, but preserve a query ledger. Search all states and historical records, not only open/current items.
-
-### Query families
+Parallelize independent source classes; serialize candidate expansion when new aliases emerge. Keep a query ledger.
 
 Run every applicable family against canonical sources:
 
@@ -147,11 +120,11 @@ Run every applicable family against canonical sources:
 5. **Fix-oriented:** validation, guard, bounds, sanitize, authorize, preserve exception, clear cache, race, revert, regression.
 6. **Version/alias:** old product names, renamed modules, package names, forks, upstream dependency, platform-specific terms.
 7. **Related-ID expansion:** every issue, PR, commit, CVE, GHSA, advisory, or duplicate target referenced by a candidate.
-8. **Negative/inverse wording:** "allow X," "prevent Y," "handle malformed Z," "avoid crash," and maintainer euphemisms such as hardening, robustness, cleanup, correctness, or edge case.
+8. **Negative/inverse wording:** "allow X," "prevent Y," "handle malformed Z," "avoid crash," and maintainer euphemisms: hardening, robustness, cleanup, correctness, edge case.
 
-Minimum search depth when source capabilities allow:
+Minimum depth when source capabilities allow (the coverage gate checks this list):
 
-- At least three materially different query families in the canonical tracker.
+- At least three materially different query families in the canonical tracker; punctuation or word-order variants do not count as separate searches.
 - Both exact-symbol and behavior/root-cause searches.
 - Open and closed/archived states.
 - Issues/bugs plus PRs/MRs/commits; fixes often have no issue.
@@ -159,24 +132,11 @@ Minimum search depth when source capabilities allow:
 - One query using the expected fix shape.
 - One query using old/alternate names.
 
-Do not count minor punctuation or word-order changes as independent searches.
-
-### Search expansion loop
-
-For each plausible hit:
-
-1. Open the primary record.
-2. Extract new aliases, IDs, affected versions, fix commits, linked duplicates, and terminology.
-3. Add them to the query matrix.
-4. Search again until no candidate adds a new high-signal term or link.
-
-This loop matters more than a fixed query count.
+Expansion loop, which matters more than query count: for each plausible hit, open the primary record; extract new aliases, IDs, affected versions, fix commits, linked duplicates, terminology; add to the matrix; search again until no candidate adds a new high-signal term or link.
 
 ## Phase 4 - Compare every plausible candidate
 
-Never classify from a title/snippet. Read issue body, comments, linked duplicates, patch, tests, and final disposition.
-
-Create one row per candidate:
+Read issue body, comments, linked duplicates, patch, tests, final disposition. One row per candidate:
 
 | Dimension | Current bug | Candidate | Match? |
 |---|---|---|---|
@@ -189,15 +149,15 @@ Create one row per candidate:
 | Observable result/impact | | | |
 | Fix/test shape | | | |
 
-Apply these identity tests:
+Identity tests:
 
 - **Same-fix test:** Would the candidate's minimal correct fix necessarily close this bug? Strongest duplicate signal.
 - **Same-failure test:** Do both fail because the same invariant is broken at the same ownership layer?
 - **Coexistence test:** Can one be fixed while the other remains? If yes, likely distinct or a variant.
-- **Counterfactual test:** If candidate never existed, would this bug still arise unchanged from a different cause?
-- **Scope test:** Does prior record explicitly or logically subsume this trigger/version/path?
+- **Counterfactual test:** If the candidate never existed, would this bug still arise unchanged from a different cause?
+- **Scope test:** Does the prior record explicitly or logically subsume this trigger/version/path?
 - **Bypass test:** Does this bug defeat a prior fix through a materially different mechanism or unguarded path?
-- **Regression test:** Is behavior a reintroduction of an already documented and fixed bug? Regressions are prior-art duplicates unless tracker policy treats recurrence separately; report both facts.
+- **Regression test:** Is the behavior a reintroduction of an already documented and fixed bug? Regressions are prior-art duplicates unless tracker policy treats recurrence separately; report both facts.
 
 Interpretation rules:
 
@@ -207,7 +167,7 @@ Interpretation rules:
 - Different symptom from same root cause and same fix -> usually duplicate/subsumed.
 - Different endpoint sharing one missing central invariant and one fix -> often duplicate/subsumed.
 - Same path after incomplete prior fix, with a distinct bypass mechanism -> `NOVEL_BYPASS` or `RELATED_VARIANT`, not automatically duplicate.
-- Prior issue need not contain a PoC, severity claim, or perfect explanation to be a duplicate.
+- A prior issue need not contain a PoC, severity claim, or perfect explanation to be a duplicate.
 - Candidate status does not erase prior art.
 
 ## Phase 5 - Inspect history and current state
@@ -217,70 +177,59 @@ Search source and release history for silent prior art:
 - `git log --all --oneline --decorate -- <path>`
 - `git log --all -p -S '<exact token>' -- <path>`
 - `git log --all -p -G '<regex>' -- <path>`
-- `git blame`, tags, maintenance branches, reverted commits, backports, and release branches.
-- Tests named after symptoms, issue IDs, regressions, or edge cases.
-- Changelog/release-note wording such as fix, harden, validate, prevent, robustness, cleanup, and security.
+- `git blame`, tags, maintenance branches, reverted commits, backports, release branches.
+- Tests named after symptoms, issue IDs, regressions, edge cases.
+- Changelog/release-note wording: fix, harden, validate, prevent, robustness, cleanup, security.
 - Package/plugin version diffs and upstream/downstream patches.
 
-Determine separately:
-
-- Present on latest default branch?
-- Present in latest stable release?
-- Fixed only on another branch/version?
-- Reintroduced after a prior fix?
-- Mitigated by default configuration but still present?
-- Silent fix with no public issue?
+Determine separately: present on latest default branch? in latest stable release? fixed only on another branch/version? reintroduced after a prior fix? mitigated by default configuration but still present? silent fix with no public issue?
 
 An already-fixed bug can still be a duplicate. A current bug can still be duplicate prior art.
 
 ## Phase 6 - Adversarial second pass
 
-Before issuing any non-duplicate verdict, assume the tentative conclusion is wrong.
-
-Run a fresh pass that:
+Before any non-duplicate verdict, assume the tentative conclusion is wrong and run a fresh pass that:
 
 - Uses aliases and terminology learned from candidates, not original wording.
 - Searches expected patch code and invariant-restoring language.
-- Searches old names, forks, upstreams, downstreams, package mirrors, and moved trackers.
-- Follows duplicate closures to canonical issues and follows canonical issues back through related records.
+- Searches old names, forks, upstreams, downstreams, package mirrors, moved trackers.
+- Follows duplicate closures to canonical issues and canonical issues back through related records.
 - Searches commits with no issue link and issues with no code link.
-- Searches comments/attachments where the tracker permits it.
-- Checks localized or ecosystem-specific terminology when target community uses it.
+- Searches comments/attachments where the tracker permits.
+- Checks localized or ecosystem-specific terminology when the target community uses it.
 - Revisits the closest three candidates and writes the decisive non-match fact for each.
 
-If independent agents are available, give one only the canonical fingerprint and target, ask it to perform a fresh duplicate check, and withhold tentative verdict/candidates. Reconcile its evidence; do not average conclusions.
+If independent agents are available, give one only the canonical fingerprint and target, withhold the tentative verdict and candidates, ask for a fresh duplicate check. Reconcile its evidence; never average conclusions.
 
-## Coverage gate and stopping rules
+## Phase 7 - Coverage gate and verdict
 
-### A duplicate is established when
+A duplicate is established when any holds:
 
-- Primary evidence describes the same root cause/invariant and trigger/scope; or
-- Prior record explicitly subsumes the current path; or
+- Primary evidence describes the same root cause/invariant and trigger/scope.
+- The prior record explicitly subsumes the current path.
 - Same-fix and same-failure tests both pass with no decisive scope difference.
 
-One authoritative record is sufficient, but confirm its identity and state from primary material. Continue enough to identify canonical record and fix history.
+One authoritative record suffices once its identity and state are confirmed from primary material; continue far enough to identify the canonical record and fix history.
 
-### `NO_DUPLICATE_FOUND` is allowed only when
+`NO_DUPLICATE_FOUND` requires all of:
 
-- Fingerprint contains no unresolved identity-critical field.
-- Every applicable critical source is checked and logged.
-- Query matrix covers exact, semantic, root-cause, fix, version/alias, and historical searches.
-- Every plausible candidate is opened and comparison completed.
-- Code/release history check is complete where available.
-- Adversarial second pass finds no unresolved high-overlap candidate.
-- Limitations are stated.
+- Fingerprint has no unresolved identity-critical field.
+- Every applicable critical source checked and logged.
+- Phase 3 minimum depth met: exact, semantic, root-cause, fix, version/alias, historical searches.
+- Every plausible candidate opened and its Phase 4 comparison completed.
+- Phase 5 code/release history check complete where available.
+- Phase 6 pass finds no unresolved high-overlap candidate.
+- Limitations stated.
 
-### Use `INCONCLUSIVE` when
+`INCONCLUSIVE` when any holds:
 
 - A critical private/inaccessible source could contain duplicates.
-- Target/version/root cause is too uncertain to compare.
+- Target/version/root cause too uncertain to compare.
 - Search/index/API failures materially reduce coverage.
 - A high-overlap candidate cannot be inspected.
-- Current code/history cannot be obtained and version identity is decisive.
+- Current code/history unobtainable and version identity decisive.
 
-Never silently downgrade a blocked source to `NOT_APPLICABLE`.
-
-## Verdict taxonomy
+### Verdict taxonomy
 
 | Verdict | Meaning |
 |---|---|
@@ -293,73 +242,13 @@ Never silently downgrade a blocked source to `NOT_APPLICABLE`.
 | `NO_DUPLICATE_FOUND` | Exhaustive accessible search found none; evidence-bounded, not absolute proof |
 | `INCONCLUSIVE` | Coverage or identity gaps prevent reliable decision |
 
-Also report technical relationship separately: `same-root-cause`, `same-symptom-different-cause`, `same-component`, `fix-bypass`, `regression`, `upstream-shared`, or `unrelated`.
+Report the technical relationship separately: `same-root-cause`, `same-symptom-different-cause`, `same-component`, `fix-bypass`, `regression`, `upstream-shared`, or `unrelated`.
 
-Confidence levels:
+Confidence, reported as these words, never as a numeric probability:
 
 - **High:** primary records and patches inspected; critical sources covered; no material ambiguity.
 - **Medium:** good public evidence but one noncritical gap or identity uncertainty.
 - **Low:** indirect evidence, blocked source, unresolved candidate, or incomplete fingerprint.
-
-Do not convert confidence into fake mathematical probability.
-
-## Durable artifact contract
-
-When the caller needs persistence or another skill will consume the result, write:
-
-`Findings/<repo-or-software>/DUPLICATE-CHECK-<finding-id>.md`
-
-This local evidence write is allowed; all repository, tracker, program, and web investigation remains read-only.
-
-Start the file with:
-
-```yaml
----
-schema_version: "bug-duplicate-check/v1"
-finding_id: "FND-YYYYMMDD-CONTEXT-CLASS-NNNN-slug"
-canonical_finding: "FND-YYYYMMDD-CONTEXT-CLASS-NNNN-slug.md"
-finding_sha256: ""
-fingerprint_sha256: ""
-target: ""
-tested_version: ""
-duplicate_verdict: "INCONCLUSIVE"
-technical_relationship: ""
-confidence: "Low"
-checked_at_utc: "YYYY-MM-DDTHH:MM:SSZ"
-critical_coverage: ""
-current_state: "unknown"
-closest_prior_art: ""
----
-```
-
-Use lowercase SHA-256 of raw canonical finding bytes for `finding_sha256`. Build `fingerprint_sha256` from UTF-8, LF-normalized canonical fingerprint values in this exact order, one `key=value` per line:
-
-```text
-target_identity
-version_window
-surface
-actor_preconditions
-trigger_input
-source_data_flow
-sink_operation
-broken_invariant
-root_cause
-observable_result
-impact
-fix_shape
-```
-
-If no canonical file exists, hash the exact normalized input record and state that in limitations. A downstream skill may reuse the artifact only when the schema, finding hash, fingerprint hash, target/version, critical coverage, and check freshness still match.
-
-For `DUPLICATE_EXACT`, `DUPLICATE_SUBSUMED`, or `LIKELY_DUPLICATE`,
-`closest_prior_art` must be a direct primary URL. The candidate-comparison row
-must use that URL and contain the decisive identity evidence. Every evidence
-ledger row must contain the exact six columns and a primary URL or a sibling
-evidence file. The ledger must contain at least one row per checked critical
-source and at least that many distinct source classes. The coverage checklist
-must contain the same number of distinct checked source classes. The validator
-rebuilds the ordered fingerprint text from the twelve `key=value` lines and
-requires its SHA-256 to match `fingerprint_sha256`.
 
 ## Required output
 
@@ -457,22 +346,49 @@ fix_shape=
 - {Every inaccessible, failed, private, unindexed, or intentionally irrelevant source.}
 ```
 
-For examples of exact duplicate, distinct variant, and blocked-private-corpus results, read [examples.md](references/examples.md).
+Examples (exact duplicate, distinct variant, blocked private corpus): [examples.md](references/examples.md).
 
-## Execution requirements
+## Durable artifact
 
-- Use local read/search plus internet research when available. Current external facts require browsing.
-- Validate every durable result before another skill consumes it:
+When the caller needs persistence or another skill will consume the result, write the required output to:
+
+`Findings/<repo-or-software>/DUPLICATE-CHECK-<finding-id>.md`
+
+Hashes:
+
+- `finding_sha256`: lowercase SHA-256 of the raw canonical finding bytes. If no canonical file exists, hash the exact normalized input record and state that in limitations.
+- `fingerprint_sha256`: SHA-256 of the UTF-8, LF-normalized canonical fingerprint values in this exact order, one `key=value` per line:
+
+```text
+target_identity
+version_window
+surface
+actor_preconditions
+trigger_input
+source_data_flow
+sink_operation
+broken_invariant
+root_cause
+observable_result
+impact
+fix_shape
+```
+
+Validator rules:
+
+- For `DUPLICATE_EXACT`, `DUPLICATE_SUBSUMED`, or `LIKELY_DUPLICATE`: `closest_prior_art` is a direct primary URL, and the candidate-comparison row for that URL holds the decisive identity evidence.
+- Every evidence-ledger row has exactly six columns and a primary URL or a sibling evidence file.
+- Ledger: at least one row per checked critical source and at least that many distinct source classes; coverage checklist: the same number of distinct checked source classes.
+- The validator rebuilds the ordered fingerprint text from the twelve `key=value` lines and requires its SHA-256 to match `fingerprint_sha256`.
+
+Validate every durable result before another skill consumes it:
 
 ```powershell
 python "$env:USERPROFILE\.brain\skills\bug-duplicate-check\scripts\validate_duplicate_record.py" "<duplicate-record>"
 ```
-- Prefer primary sources: canonical issue trackers, commits, patches, advisories, vendor records, release notes.
-- Cite every duplicate claim with direct URL/file evidence.
-- Log zero-result searches; absence is meaningful only with query and scope.
-- Open every high-signal result. Search result snippets are discovery evidence only.
-- Search all states and historical versions.
-- Parallelize independent source classes; serialize candidate expansion when new aliases emerge.
-- Do not stop at first "no result." Stop only at coverage gate.
-- Do not let bounty eligibility, severity, payout, or disclosure status distort bug-identity analysis.
-- If asked for filing advice, append a separate context-specific disposition after duplicate verdict.
+
+A downstream skill may reuse the artifact only when schema, finding hash, fingerprint hash, target/version, critical coverage, and check freshness still match.
+
+## Canonical registry
+
+If this check changes a finding or hunt row, use the Google Workspace MCP against the spreadsheet in `System/registry.md`. Canonical finding records live at `Findings/<program>/<software>/<id>/`. Local CSV files are derived views, not authority.

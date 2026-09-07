@@ -11,19 +11,22 @@ $qualverloop -Image <image or project>
 $qualverloop -Video <video or project>
 ```
 
-## Modes
+## Rules
+- Review-only request: stop after Rate.
+- Report only inspection or verification that happened.
+- A score never replaces required checks, stricter category gates or independent review.
+- Improve within authorized scope only; keep what works; no unrelated changes.
 
-- **Default:** review anything against its purpose, intended audience, and relevant quality criteria.
-- **-Image (ImgVerLoop):** view the actual image; check brief fidelity, composition, legibility, artifacts, and output properties or whatever else is relevant to the actual quality being measured.
-- **-Video (VidVerLoop):** check for native video watching capability wihtin the current model, if not, use `$watch`; check scene boundaries, continuity, motion, pacing, captions, audio, and media properties or whatever else is relevant to the actual quality being measured. Follow the video policy for production changes.
+## Modes
+- **Default:** review against purpose, audience and relevant quality criteria.
+- **-Image (ImgVerLoop):** view the image itself; check brief fidelity, composition, legibility, artifacts, output properties, anything else relevant.
+- **-Video (VidVerLoop):** watch natively if the model can, else `$watch`; check scene boundaries, continuity, motion, pacing, captions, audio, media properties, anything else relevant. Production changes follow the video policy.
 
 ## Loop
+1. **Review:** what must the target achieve; judge current quality on the criteria that matter here (e.g. clarity, accuracy, usefulness, completeness, usability, craftsmanship).
+2. **Rate:** each relevant dimension and overall **0.0–10.0**, with concrete reasons, strengths, weaknesses; judge what exists, not plans.
+3. **Improve:** fix the highest-impact weaknesses.
+4. **Repeat:** from 1 until threshold: caller's or workflow's, else overall **>7.5/10**, target **>8.0/10**. Blocked: explain why; never inflate scores or rerun unchanged work.
 
-1. **Review:** understand what the target is meant to achieve. Examine its current quality using suitable criteria, such as clarity, accuracy, usefulness, completeness, usability, or craftsmanship. Choose only what matters to this target.
-2. **Rate:** score relevant dimensions and overall quality **0.0–10.0**. Give concrete reasons, strengths, and weaknesses; judge what exists, not planned improvements.
-3. **Improve:** address the weaknesses with the greatest impact on quality, within authorized scope. Preserve what already works; avoid unrelated changes.
-4. **Repeat:** review the improved result, rate it again, and make further improvements until the requested quality is reached. Use caller/workflow thresholds; otherwise require overall **>7.5/10**, targeting **>8.0/10**. Preserve required checks, stricter category gates, and independent review; a score does not replace them.
-
-For review-only requests, stop after rating. If meaningful improvement is blocked, explain why rather than inflating scores or repeating unchanged work. Do not claim inspection or verification that did not happen.
-
-Return the initial and final ratings, key improvements, remaining weaknesses or blockers, and the result or its location when applicable.
+## Report
+Initial and final ratings, key improvements, remaining weaknesses or blockers, result or its location.

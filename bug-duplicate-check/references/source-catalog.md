@@ -108,7 +108,7 @@ Search quicksearch and advanced fields, including resolved/verified/duplicate bu
 
 ```text
 https://bugzilla.mozilla.org/buglist.cgi?quicksearch={query}
-https://bugs.chromium.org/p/{project}/issues/list?q={query}
+https://issues.chromium.org/issues?q={query}
 ```
 
 Follow duplicate chains to canonical bug. Restricted/security bugs create unavoidable blind spots; record them.
@@ -202,6 +202,25 @@ Useful API/CLI routes:
 gh api repos/{owner}/{repo}/security-advisories --paginate
 gh api --method GET /advisories -f ecosystem='{ecosystem}' -f affects='{package}' --paginate
 ```
+
+When the `vuln-intel` MCP is connected, run it first over the advisory class: `search_vulns` (keyword, semantic, and seed-CVE mechanism search fused across NVD, KEV, EPSS, OSV, GHSA), `verify_cve_claim` (does a cited CVE exist and cover this version), `enrich_cve` (references, fix commits, PoCs), and `search_public_code` (repos carrying the same code string, for vendored or copied bugs). Its output is discovery evidence; still open the primary advisory and fix.
+
+Research and vendor-lab disclosures (often precede or replace CVEs):
+
+- Google Project Zero issue tracker and blog.
+- Zero Day Initiative advisories (`zerodayinitiative.com/advisories`), Cisco Talos, Trend Micro, Checkmarx, Snyk research, GitHub Security Lab.
+- oss-security list (`openwall.com/lists/oss-security`), Full Disclosure and Bugtraq archives on seclists.org.
+- syzbot dashboard for Linux kernel crashes; OSS-Fuzz and ClusterFuzz issues for fuzzed projects.
+- Wayback Machine for deleted advisories, issues, or posts referenced by ID.
+
+Code search across ecosystems, for fixed or unfixed copies of the same code:
+
+- GitHub code search (`https://github.com/search?q={snippet}&type=code`), Sourcegraph (`sourcegraph.com/search`), grep.app.
+- `deps.dev` for package dependents and cross-referenced OSV records.
+
+Distribution security trackers, which often record fixes and CVE splits before upstream does:
+
+- Debian security tracker, Ubuntu CVE tracker, Red Hat CVE database and Bugzilla, SUSE CVE pages, Alpine secdb, Gentoo GLSA, Arch security tracker.
 
 Additional databases:
 

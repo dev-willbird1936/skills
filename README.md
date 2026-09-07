@@ -15,7 +15,7 @@ npx skills add dev-willbird1936/skills --skill aptus -g
 | [`claude-advisor`](claude-advisor/SKILL.md) | Consult Fable 5.1 as a read-only second opinion from Claude Code. |
 | [`codex-advisor`](codex-advisor/SKILL.md) | Consult GPT-6 Astra through Codex as a read-only advisor. |
 | [`codex-blue-advisor`](codex-blue-advisor/SKILL.md) | Consult GPT Daybreak Blue at max effort through Codex. |
-| [`compress`](compress/SKILL.md) | Compress any text or file: `lossless`, `lossy`, or `minimum`. |
+| [`compress`](compress/SKILL.md) | Compress any text or file: `lossless`, `lossy`, or `maximum`. |
 | [`restructure`](restructure/SKILL.md) | Reword and reorder instruction text for adherence, research-backed. |
 | [`reimagine`](reimagine/SKILL.md) | `/restructure` then `/compress lossy`, with backup and in-place replace. |
 | [`qualverloop`](qualverloop/SKILL.md) | Quality verification loop: review until the result stops improving. |
