@@ -1,15 +1,33 @@
-# Local secrets and credentials
-.env
-.env.*
-!.env.example
-*.key
-*.pem
-*.p12
-*.pfx
+# Ignore everything by default; allow-list published skills below.
+*
+!.gitignore
+!README.md
 
-# Local tooling and generated output
-.venv/
-node_modules/
-dist/
-build/
-*.log
+!aptus/
+!aptus/**
+!babysit/
+!babysit/**
+!bug-duplicate-check/
+!bug-duplicate-check/**
+!claude-advisor/
+!claude-advisor/**
+!codex-advisor/
+!codex-advisor/**
+!codex-blue-advisor/
+!codex-blue-advisor/**
+!compress/
+!compress/**
+!qualverloop/
+!qualverloop/**
+!reimagine/
+!reimagine/**
+!restructure/
+!restructure/**
+
+# never publish these even inside allowed skills
+__pycache__/
+*.pyc
+*.bak-*
+*.orig
+.DS_Store
+.serena/

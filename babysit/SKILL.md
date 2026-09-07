@@ -1,6 +1,7 @@
 ---
 name: babysit
-description: Launch a separate user-visible AI-agent chat, task, or session with an explicit goal, then babysit it by repeatedly reading its transcript and tool activity, understanding what it is doing, and steering whenever the supervisor judges intervention relevant until the result is verified complete or genuinely blocked. Use when the user invokes /babysit or $babysit, says "launch a new chat with goal set, babysit it from here," asks to monitor or supervise another agent session, or wants an agent intelligently guided as it works.
+description: Supervise a user-requested agent task or session through status inspection, targeted steering and verified completion.
+  Reuse an existing task unless the user asks to launch a new one.
 ---
 
 # Babysit
@@ -31,7 +32,7 @@ Use the text after `/babysit` or `$babysit` as the job. If no objective exists i
 
 ## 2. Launch the worker
 
-Use the current host's native tools for creating and controlling a separate user-visible chat, task, or persistent agent session. Tool names vary by host. Use capabilities equivalent to:
+Use the current host's native tools for the named existing task. Create a separate user-visible task only when the user asks to launch one; supervision alone is not a request for a duplicate. Tool names vary by host. Use capabilities equivalent to:
 
 - create a new chat/task/session;
 - read its transcript, status, and outputs;
@@ -40,7 +41,7 @@ Use the current host's native tools for creating and controlling a separate user
 
 Prefer a user-visible persistent session over a hidden subagent. If the host cannot create, inspect, and steer another session, state that limitation instead of pretending to babysit.
 
-Choose the correct project or general context before launch when the host requires it. Use the current project directly by default; use an isolated worktree or equivalent only when requested or required. Preserve the user's configured agent/model unless they explicitly override it.
+Choose the correct project or general context before launch. Follow the host's default isolation/worktree behavior unless the user specifies otherwise. Preserve the user's configured agent/model and explicit reasoning effort.
 
 Open the worker with a self-contained prompt containing:
 

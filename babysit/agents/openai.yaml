@@ -1,0 +1,4 @@
+interface:
+  display_name: "Babysit"
+  short_description: "Read and intelligently steer an agent session"
+  default_prompt: "Use $babysit to supervise the user-named existing agent session; launch one only when explicitly requested, then inspect, steer, and independently verify completion."

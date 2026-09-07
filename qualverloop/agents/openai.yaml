@@ -1,0 +1,4 @@
+interface:
+  display_name: "QualVerLoop"
+  short_description: "Inspect, rate, fix, and recheck deliverable quality"
+  default_prompt: "Use $qualverloop on this target; use -Image or -Video for media inspection and respect the requested edit scope."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bug Duplicate Check"
+  short_description: "Exhaustive evidence-based duplicate checks"
+  default_prompt: "Use $bug-duplicate-check to determine whether this bug duplicates any existing report, fix, advisory, or known issue."
