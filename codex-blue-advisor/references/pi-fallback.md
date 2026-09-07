@@ -2,7 +2,7 @@
 
 Read only when the native Daybreak Blue subagent route is unavailable. The parent skill's model, effort, read-only, safety, identity, and no-total-timeout rules remain mandatory.
 
-Pi is authoritative for the model and effort pin: `openai-codex/gpt-daybreak-blue` with `--thinking max`. Run exactly one Pi process for one consult, wait for it to finish, and do not start a duplicate while it is alive. Do not use `omp` unless Pi is unavailable.
+Pi is authoritative for the model and effort pin: `openai-codex/gpt-daybreak-blue` with `--thinking xhigh`. Run exactly one Pi process for one consult, wait for it to finish, and do not start a duplicate while it is alive. Do not use `omp` unless Pi is unavailable.
 
 ## Windows PowerShell
 
@@ -20,7 +20,7 @@ $prompt = @'
 <fully self-contained prompt - use the parent skill's prompt contract>
 '@
 
-& $pi --provider openai-codex --model gpt-daybreak-blue --thinking max --approve --no-session -p $prompt
+& $pi --provider openai-codex --model gpt-daybreak-blue --thinking xhigh --approve --no-session -p $prompt
 $status = $LASTEXITCODE
 if ($status -ne 0) {
   throw "Daybreak Blue advisor consult failed (exit code $status). Do not fabricate advice."
@@ -33,7 +33,7 @@ Use the available PowerShell or shell tool's normal foreground execution if it c
 
 ```bash
 PI="$(command -v pi)"
-"$PI" --provider openai-codex --model gpt-daybreak-blue --thinking max --approve --no-session -p "$PROMPT"
+"$PI" --provider openai-codex --model gpt-daybreak-blue --thinking xhigh --approve --no-session -p "$PROMPT"
 status=$?
 if [ "$status" -ne 0 ]; then
   echo "Daybreak Blue advisor consult failed (exit code $status). Do not fabricate advice." >&2

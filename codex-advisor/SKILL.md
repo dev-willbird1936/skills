@@ -1,7 +1,8 @@
 ---
 name: codex-advisor
 description: Run a read-only GPT-6 Astra advisor consultation at high effort, using native delegation when available or the
-  documented CLI fallback. One consultation by default; checkpoints only when selected.
+  documented CLI fallback. A question after the trigger means one consult; a bare trigger or a task means session
+  checkpoints; `-i` forces one consult, `-chk` forces checkpoints. Aliases /codex-advisor, /codevisor.
 ---
 
 # /codex-advisor (alias: /codevisor) — GPT-6 Astra consultation (high effort)
@@ -12,16 +13,18 @@ Before other work, scan the whole user message, trailing lines included. Activat
 
 ## Mode
 
-Token directly after the trigger (`/codex-advisor <token>` / `/codevisor <token>`), case-insensitive:
+Token directly after the trigger (`/codex-advisor <token>` / `/codevisor <token>`), case-insensitive, then what follows:
 
-| Next token | Mode |
+| After the trigger | Mode |
 |---|---|
-| nothing, or anything else | One-time consult (default) |
-| `true`, `-chk`, `-checkpoints` | Session checkpoints |
+| `-i` (individual call) | One consult, always |
+| `true`, `-chk`, `-checkpoints` | Session checkpoints, always |
+| a question or a specific decision | One consult on it |
+| nothing, or a task description without a question | Session checkpoints |
 
-Only the very next token counts; `true` elsewhere or another command's argument keeps the default. Strip a flag before interpreting the rest.
+Only the very next token can be a flag; `-i` or `true` elsewhere, or another command's argument, does not count. Strip a flag before interpreting the rest. Question vs task: a question asks for an answer now; a task asks for work. Unsure: treat as a question and say which reading you took.
 
-- One-time: exactly one consult now on the current request or attached question; act on it as executor; consult again only when the user invokes the skill again. [checkpoint policy](references/checkpoints.md) does not apply.
+- One consult: exactly one consult now on the current request or attached question; act on it as executor; consult again only when the user invokes the skill again. [checkpoint policy](references/checkpoints.md) does not apply.
 - Checkpoints: on for the rest of the session. Read [checkpoint policy](references/checkpoints.md); it plus "Checkpoint frequency" below govern when to consult.
 
 Model, effort, transport, no-timeout rule, prompt structure and safety are identical in both modes.
@@ -36,8 +39,8 @@ Model, effort, transport, no-timeout rule, prompt structure and safety are ident
 
 State the mode in one line, then act:
 
-- Default: "One-time GPT-6 Astra consult (`high` effort, no skill-imposed timeout); session checkpoints off." Run the consult, continue as executor.
-- Flag: "Advisor checkpoints active for this session (GPT-6 Astra at `high` reasoning effort, native Astra subagent when available and read-only Codex CLI fallback otherwise, no skill-imposed wall-clock timeout, executor = current session model)." Continue the user's request, consulting per [checkpoint policy](references/checkpoints.md).
+- One consult: "One-time GPT-6 Astra consult (`high` effort, no skill-imposed timeout); session checkpoints off." Run the consult, continue as executor.
+- Checkpoints: "Advisor checkpoints active for this session (GPT-6 Astra at `high` reasoning effort, native Astra subagent when available and read-only Codex CLI fallback otherwise, no skill-imposed wall-clock timeout, executor = current session model)." Continue the user's request, consulting per [checkpoint policy](references/checkpoints.md).
 
 ## Transport
 
