@@ -2,7 +2,7 @@
 
 Read only when the native Daybreak Blue subagent route is unavailable. The parent skill's model, effort, read-only, safety, identity, and no-total-timeout rules remain mandatory.
 
-Pi is authoritative for the model and effort pin: `openai-codex/gpt-daybreak-blue` with `--thinking [EFFORT]`, where `[EFFORT]` is `xhigh` for an individual consult and `high` for a checkpoint consult. Run exactly one Pi process for one consult, wait for it to finish, and do not start a duplicate while it is alive. Do not use `omp` unless Pi is unavailable.
+Pi is authoritative for the model and effort pin: `openai-codex/gpt-daybreak-blue` with `--thinking [EFFORT]`, where `[EFFORT]` is `xhigh` for an individual consult and `high` for a checkpoint consult. Run exactly one Pi process for one consult, wait for it to finish, and do not start a duplicate while it is alive.
 
 ## Windows PowerShell
 

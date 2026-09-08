@@ -102,32 +102,27 @@ rm -f "$tmp"
 ```
 
 - `codex_bin="$(command -v codex || command -v codex.cmd)"`: resolves the binary portably.
-  Confirmed live: on this Windows install, bare `codex` does NOT resolve in Claude Code's Git
-  Bash (no extensionless shim, and bash doesn't apply `PATHEXT`) — only `codex.cmd` does. On
-  Linux (this repo's skills also sync to a VPS) bare `codex` resolves fine; the fallback covers
-  both without branching per-OS.
+  In Git Bash on Windows bare `codex` often does not resolve (no extensionless shim, and bash
+  does not apply `PATHEXT`), only `codex.cmd` does; on Linux and macOS bare `codex` resolves.
+  The fallback covers both without branching per OS.
 - `--sandbox read-only`: advisory only — Codex cannot edit files. Treat this as a strong
   default, not an absolute guarantee: Codex CLI's sandbox enforcement on Windows is newer and
   weaker than on macOS/Linux.
-- Do **not** add `--ask-for-approval` — confirmed it doesn't exist on the currently installed
-  CLI (`error: unexpected argument '--ask-for-approval' found`); `codex exec` is already
-  non-interactive and defaults to never-approve on its own.
-- `--skip-git-repo-check`: lets this run in any directory, including non-repo ones (this very
-  repo, `.brain`, isn't a git repo, and the consult must still work from inside it).
+- Do **not** add `--ask-for-approval`; recent Codex CLI builds reject it, and `codex exec` is
+  already non-interactive and defaults to never-approve on its own.
+- `--skip-git-repo-check`: lets this run in any directory, including non-repo ones.
 - `--ignore-user-config`: skips loading `~/.codex/config.toml`. Without it, the advisor call
-  also loads the user's full MCP fleet (retell/phone, resend/email, bank, github, roblox,
-  serena, playwright, chrome-devtools, node_repl) under `approval: never`, and fires the user's
-  Codex session-start/prompt-submit hooks — pure side-effect surface for a call that's supposed
-  to be read-only analysis, and measured ~2.4x slower startup (~20s vs ~8.4s) because of it.
-  Authentication is unaffected; `-m`/`-c` still pin model/effort regardless of the now-ignored
-  config defaults.
+  also loads every MCP server in the user's config under `approval: never` and fires the user's
+  Codex session-start and prompt-submit hooks: pure side-effect surface for a call that is
+  supposed to be read-only analysis, and a measurably slower startup. Authentication is
+  unaffected; `-m`/`-c` still pin model and effort regardless of the ignored config defaults.
 - `-m gpt-6-astra -c model_reasoning_effort=[EFFORT]`: pins the model and effort explicitly, so
   the consult stays correct even if `~/.codex/config.toml`'s defaults ever drift.
 - `--color never`: keeps the captured output free of ANSI escape codes.
 - `-o "$tmp"`, with stdout suppressed (`>/dev/null`, stderr kept) and read back from `$tmp`
   after: `codex exec` interleaves reasoning/tool-call noise on stdout and isn't clean to parse
   directly, so capture the clean final message separately via `--output-last-message` (`-o`)
-  instead. Same pattern `claude-codex-proxy.js` uses elsewhere in this repo.
+  instead.
 - The heredoc (`<<'PROMPT_EOF'`, quoted delimiter) pipes the prompt over stdin (the trailing
   `-` tells `codex exec` to read it from there) — this sidesteps shell-quoting/escaping issues
   entirely for prompts containing quotes, backticks, or code snippets. Don't inline the prompt

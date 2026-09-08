@@ -13,7 +13,7 @@ Determine whether the same underlying bug already exists anywhere relevant. Opti
 
 ## Non-negotiables
 
-- Read-only: never file, comment, disclose, edit repositories, or mutate trackers. Writes are limited to the local durable artifact and the canonical-registry row described below.
+- Read-only: never file, comment, disclose, edit repositories, or mutate trackers. The only write is the local durable artifact described below.
 - Decide from tools and current primary sources (canonical trackers, commits, patches, advisories, vendor records, release notes). Never from memory, one database, or a title/snippet; a search hit is discovery evidence only until its primary record is opened. Current external facts require browsing.
 - Compare bug identity, not labels. Same CWE, symptom, endpoint, component, or impact alone never establishes duplication.
 - Every record state is prior art: open, closed, merged, reverted, duplicate, wontfix, invalid, archived, historical versions. Search security and non-security prior art: issue, fix, regression test, release note, support thread, commit, advisory, duplicate closure, private tracker item.
@@ -383,12 +383,8 @@ Validator rules:
 
 Validate every durable result before another skill consumes it:
 
-```powershell
-python "$env:USERPROFILE\.brain\skills\bug-duplicate-check\scripts\validate_duplicate_record.py" "<duplicate-record>"
+```bash
+python <this-skill-folder>/scripts/validate_duplicate_record.py "<duplicate-record>"
 ```
 
 A downstream skill may reuse the artifact only when schema, finding hash, fingerprint hash, target/version, critical coverage, and check freshness still match.
-
-## Canonical registry
-
-If this check changes a finding or hunt row, use the Google Workspace MCP against the spreadsheet in `System/registry.md`. Canonical finding records live at `Findings/<program>/<software>/<id>/`. Local CSV files are derived views, not authority.

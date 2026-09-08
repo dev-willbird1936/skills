@@ -40,7 +40,7 @@ Look at the token directly after the command, case-insensitive, then at what fol
 
 ## Transport
 
-1. Claude Code (the `Agent` tool exists): read [references/native-claude-consult.md](references/native-claude-consult.md). Agent by mode: `claude-advisor-xhigh` for one consult, `claude-advisor` for checkpoints. Verify the agent definition is present with its pinned effort; take that from the definition, never from an old note or prompt wording alone.
+1. Claude Code (the `Agent` tool exists): read [references/native-claude-consult.md](references/native-claude-consult.md). Agent by mode: `claude-advisor-xhigh` for one consult, `claude-advisor` for checkpoints. Both definitions ship in this skill's `agents/` folder and must be copied to `~/.claude/agents/` once; verify the definition is present with its pinned effort, never trust an old note or prompt wording alone.
 2. Any other harness (Codex, Pi, Cursor, other): read [references/cli-fallback.md](references/cli-fallback.md) and shell out to `claude -p` with `--effort` set by mode. Never run both routes for one consult.
 3. Native ambient advisor features are a separate host capability; verify their availability and settings when relevant. This skill requests an explicit consult with a named model and pinned effort.
 4. Read [references/checkpoints.md](references/checkpoints.md) only in checkpoint mode.

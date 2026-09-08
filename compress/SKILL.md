@@ -65,7 +65,7 @@ Rules below are written for `lossless`. Other modes relax only the rules listed 
 2. Compare materially different compact representations, including a reconstruction from the contract rather than an edit of the original wording. Continue past the first shorter draft.
 3. Apply structural, implementation, sentence, word and syntax reductions. For each remaining element ask: "What specifically breaks, disappears, becomes ambiguous or costs more elsewhere if this is removed or replaced?" Delete it when nothing does.
 4. Measure complete candidates with the tokenizer of the model that will consume the result, in this order:
-   1. Anthropic target: `POST https://api.anthropic.com/v1/messages/count_tokens` with the full result as one user message (key from `$HOME/.brain/secrets/`). Report as exact.
+   1. Anthropic target: `POST https://api.anthropic.com/v1/messages/count_tokens` with the full result as one user message (needs an Anthropic API key). Report as exact.
    2. Surrogate: `tiktoken` (`o200k_base` or `cl100k_base`) if installed. Report tokenizer name and label as surrogate.
    3. Neither: report tokens as unmeasured. Characters are always measured.
    Count the final assembled text including legends, definitions, delimiters and other overhead, never separate fragments. Never present character-based estimates as exact token counts.
