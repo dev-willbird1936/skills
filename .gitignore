@@ -7,6 +7,8 @@
 !aptus/**
 !babysit/
 !babysit/**
+!caveman/
+!caveman/**
 !bug-duplicate-check/
 !bug-duplicate-check/**
 !claude-advisor/
@@ -17,6 +19,8 @@
 !codex-blue-advisor/**
 !compress/
 !compress/**
+!ponytail/
+!ponytail/**
 !hook-install/
 !hook-install/**
 !qualverloop/
@@ -30,6 +34,8 @@
 __pycache__/
 *.pyc
 *.bak-*
+*.bak-local-*
+SKILL.compact.md.bak-*
 *.orig
 .DS_Store
 .serena/

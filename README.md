@@ -11,12 +11,14 @@ npx skills add dev-willbird1936/skills --skill aptus -g
 |---|---|
 | [`aptus`](aptus/SKILL.md) | Always-on working style: Karpathy thinking, Minto and ADHD-shaped replies, caveman wording, ponytail implementation. Ships session hooks for Claude Code, Codex, Cursor and Pi. |
 | [`babysit`](babysit/SKILL.md) | Supervise a separate agent task through verified completion. |
+| [`caveman`](caveman/SKILL.md) | Unofficial reimagined fork of JuliusBrussee/caveman: ultra-compressed replies, levels lite, full, ultra and wenyan. |
 | [`bug-duplicate-check`](bug-duplicate-check/SKILL.md) | Exhaustive, read-only duplicate and prior-art investigation for one bug. |
 | [`claude-advisor`](claude-advisor/SKILL.md) | Consult Fable 5.1 as a read-only second opinion from Claude Code. |
 | [`codex-advisor`](codex-advisor/SKILL.md) | Consult GPT-6 Astra through Codex as a read-only advisor. |
 | [`codex-blue-advisor`](codex-blue-advisor/SKILL.md) | Consult GPT Daybreak Blue at max effort through Codex. |
 | [`compress`](compress/SKILL.md) | Compress any text or file: `lossless`, `lossy`, or `maximum`. |
 | [`hook-install`](hook-install/SKILL.md) | Make any instruction text always-on: `/compress maximum` it, then inject it at session start in every harness found (Claude Code, Codex, Cursor, Pi). |
+| [`ponytail`](ponytail/SKILL.md) | Unofficial reimagined fork of DietrichGebert/ponytail: the laziest solution that works, levels lite, full, ultra. |
 | [`restructure`](restructure/SKILL.md) | Reword and reorder instruction text for adherence, research-backed. |
 | [`reimagine`](reimagine/SKILL.md) | `/restructure` then `/compress lossy`, with backup and in-place replace. |
 | [`qualverloop`](qualverloop/SKILL.md) | Quality verification loop: review until the result stops improving. |
