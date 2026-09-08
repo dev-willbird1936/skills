@@ -17,6 +17,8 @@
 !codex-blue-advisor/**
 !compress/
 !compress/**
+!hook-install/
+!hook-install/**
 !qualverloop/
 !qualverloop/**
 !reimagine/

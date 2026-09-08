@@ -16,6 +16,7 @@ npx skills add dev-willbird1936/skills --skill aptus -g
 | [`codex-advisor`](codex-advisor/SKILL.md) | Consult GPT-6 Astra through Codex as a read-only advisor. |
 | [`codex-blue-advisor`](codex-blue-advisor/SKILL.md) | Consult GPT Daybreak Blue at max effort through Codex. |
 | [`compress`](compress/SKILL.md) | Compress any text or file: `lossless`, `lossy`, or `maximum`. |
+| [`hook-install`](hook-install/SKILL.md) | Make any instruction text always-on: `/compress maximum` it, then inject it at session start in every harness found (Claude Code, Codex, Cursor, Pi). |
 | [`restructure`](restructure/SKILL.md) | Reword and reorder instruction text for adherence, research-backed. |
 | [`reimagine`](reimagine/SKILL.md) | `/restructure` then `/compress lossy`, with backup and in-place replace. |
 | [`qualverloop`](qualverloop/SKILL.md) | Quality verification loop: review until the result stops improving. |
