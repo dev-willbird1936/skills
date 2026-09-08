@@ -27,7 +27,7 @@ Rules below are written for `lossless`. Other modes relax only the rules listed 
 
 | Rule | lossless | lossy | maximum |
 |---|---|---|---|
-| Objective | Zero loss of function or meaning; then minimise tokens | Preserve function; minimise tokens; minor meaning loss accepted where the trade is clearly worth it | Maximal compression that still meets the original intention: the smallest text from which the consumer still does the right thing. Target at most half the source tokens; if the result is above 60%, cut again |
+| Objective | Zero loss of function or meaning; then minimise tokens | Preserve function; minimise tokens; minor meaning loss accepted where the trade is clearly worth it | Maximal compression that still meets the original intention: the smallest text from which the consumer still does the right thing. Cut until removing any further line would change what the consumer does |
 | Function (behaviour, interfaces, I/O, errors, security, validation, requirements, prohibitions) | Keep all | Keep all | Keep what is needed for the target to remain usable for its primary purpose; drop peripheral or rarely exercised function last |
 | Unique meaning (facts, rationale, nuance, priorities, distinctions) | Keep all | May drop rationale, background, low-value nuance, redundant emphasis and secondary examples; must keep must/should/may, all/any, negation, bounds, exceptions and precedence | Drop all rationale, all examples, all headers, all restatements, all hedges, all connective prose. One line per rule, fragments allowed. Keep negation, bounds, exceptions, precedence and switches; never flip a rule |
 | Ambiguity | Never introduce | Accept minor ambiguity where the consumer's default reading is the original meaning | Accept ambiguity |
